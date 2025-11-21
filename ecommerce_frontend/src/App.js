@@ -12,6 +12,8 @@ import UserProducts from "./pages/user/UserProducts";
 
 import Login from "./components/Login";
 import UserCart from './pages/user/UserCart';
+import UserOrders from './pages/user/UserOrders';
+import UserOrderDetail from './pages/user/UserOrderDetail';
 
 function App() {
   return (
@@ -34,8 +36,11 @@ function App() {
         <Route path="/user/categories" element={<UserCategories />} />
         <Route path="/user/products" element={<UserProducts />} />
         <Route path="/user/cart" element={<UserCart />} />
+        <Route path="/user/orders" element={<UserOrders />} />
         <Route path="/user/category/:categoryId/products" element={<UserCategoryProducts />} />
         <Route path="/user/product/:productId" element={<UserProductDetail />} />
+        <Route path="/user/orders/:orderId" element={<UserOrderDetail />} />
+        
       </Routes>
     </BrowserRouter>
     </div>

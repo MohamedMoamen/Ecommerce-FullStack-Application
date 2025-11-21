@@ -26,15 +26,21 @@ class OrderController extends Controller
   {
     $user = $request->user();
     
-    //Be Sure That This Order Belongs To This User
     $order = Order::where('id', $id)
-                ->where('user_id', $user->id)
-                ->firstOrFail();
+                  ->where('user_id', $user->id)
+                  ->firstOrFail();
 
-    //Get Products Belongs To This Order
     $items = OrderProduct::where('order_id', $order->id)
-                ->with('product') 
-                ->get();
+                        ->with('product')
+                        ->get()
+                        ->map(function($item) {
+                            return [
+                                'id' => $item->product->id,
+                                'name' => $item->product->name,
+                                'price' => $item->price,
+                                'quantity' => $item->quantity,
+                            ];
+                        });
 
     return response()->json([
         'order' => $order,

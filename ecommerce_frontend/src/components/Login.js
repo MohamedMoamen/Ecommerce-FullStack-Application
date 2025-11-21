@@ -44,7 +44,7 @@ const Login = () => {
       localStorage.setItem('access_token', res.data.access_token);
       localStorage.setItem('role', 'user');
 
-      navigate('/user/dashboard');
+      navigate('/user/home');
     } catch (err) {
       setError(err.response?.data?.message || 'Register failed');
     }
