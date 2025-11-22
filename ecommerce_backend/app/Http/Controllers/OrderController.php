@@ -14,7 +14,7 @@ class OrderController extends Controller
 
     $orders = Order::where('user_id', $user->id)
                     ->orderBy('created_at', 'desc')
-                    ->select('id', 'total_price', 'status', 'created_at')
+                    ->select('id', 'total_price', 'status','address','mobile', 'created_at')
                     ->get();
 
     return response()->json($orders);

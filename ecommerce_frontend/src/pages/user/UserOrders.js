@@ -19,7 +19,7 @@ const UserOrders = () => {
       const res = await axios.get("http://127.0.0.1:8000/api/orders", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      // Sort by latest first (in case backend doesn't do it)
+
       const sortedOrders = res.data.sort(
         (a, b) => new Date(b.created_at) - new Date(a.created_at)
       );
@@ -48,17 +48,23 @@ const UserOrders = () => {
                 <th style={th}>Order ID</th>
                 <th style={th}>Total Price</th>
                 <th style={th}>Status</th>
+                <th style={th}>Address</th>
+                <th style={th}>Mobile</th>
                 <th style={th}>Created At</th>
                 <th style={th}>Action</th>
               </tr>
             </thead>
+
             <tbody>
               {orders.map((order) => (
                 <tr key={order.id}>
                   <td style={td}>{order.id}</td>
                   <td style={td}>${order.total_price}</td>
                   <td style={td}>{order.status}</td>
+                  <td style={td}>{order.address}</td>
+                  <td style={td}>{order.mobile}</td>
                   <td style={td}>{new Date(order.created_at).toLocaleString()}</td>
+
                   <td style={td}>
                     <button
                       onClick={() => navigate(`/user/orders/${order.id}`)}

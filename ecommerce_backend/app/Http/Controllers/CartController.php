@@ -106,64 +106,79 @@ class CartController extends Controller
     }
 
     //Checkout
-     public function checkout(Request $request)
-    {
-        $user = $request->user();
-        $cart = Cart::with('items.product')->where('user_id', $user->id)->first();
+    public function checkout(Request $request)
+  {
+    $user = $request->user();
 
-        if (!$cart || $cart->items->isEmpty()) {
-            return response()->json(['message' => 'Cart is empty'], 400);
+    // Validate Input (address & mobile)
+    $request->validate([
+        'address' => 'required|string|max:255',
+        'mobile'  => 'required|string|max:20',
+    ]);
+
+    $cart = Cart::with('items.product')->where('user_id', $user->id)->first();
+
+    if (!$cart || $cart->items->isEmpty()) {
+        return response()->json(['message' => 'Cart is empty'], 400);
+    }
+
+    DB::beginTransaction();
+    try {
+        //Calculate Total Price 
+        $total = 0;
+        foreach ($cart->items as $item) {
+            $product = $item->product;
+            if ($product->quantity < $item->quantity) {
+                DB::rollBack();
+                return response()->json(['message' => "Product {$product->id} out of stock"], 400);
+            }
+            $linePrice = $product->price * $item->quantity;
+            $total += $linePrice;
         }
 
-        DB::beginTransaction();
-        try {
-            //Calculate Total Price 
-            $total = 0;
-            foreach ($cart->items as $item) {
-                $product = $item->product;
-                if ($product->quantity < $item->quantity) {
-                    DB::rollBack();
-                    return response()->json(['message' => "Product {$product->id} out of stock"], 400);
-                }
-                $linePrice = $product->price * $item->quantity;
-                $total += $linePrice;
-            }
+        //Create Order with address & mobile
+        $order = Order::create([
+            'user_id'     => $user->id,
+            'total_price' => $total,
+            'status'      => 'pending',
+            'address'     => $request->address,
+            'mobile'      => $request->mobile,
+        ]);
 
-            //Create Order
-            $order = Order::create([
-                'user_id' => $user->id,
-                'total_price' => $total,
-                'status' => 'pending',
+        // Transfer items to order_product Table
+        foreach ($cart->items as $item) {
+            OrderProduct::create([
+                'order_id'   => $order->id,
+                'product_id' => $item->product_id,
+                'quantity'   => $item->quantity,
+                'price'      => $item->product->price,
             ]);
 
-            //If you want to link order with cart
-            // $order->cart_id = $cart->id; $order->save();
-
-            // Transfer items to order_product Table
-            foreach ($cart->items as $item) {
-                OrderProduct::create([
-                    'order_id' => $order->id,
-                    'product_id' => $item->product_id,
-                    'quantity' => $item->quantity,
-                    'price' => $item->product->price,
-                ]);
-
-                //Decrease From Stock
-                $item->product->decrement('quantity', $item->quantity);
-            }
-
-            //Make Cart Empty And Make Status of Cart Ordered
-            $cart->items()->delete();
-            $cart->status = 'ordered';
-            $cart->save();
-
-            DB::commit();
-            return response()->json(['message' => 'Order placed', 'order' => $order]);
-        } catch (Exception $e) {
-            DB::rollBack();
-            return response()->json(['message' => 'Checkout failed', 'error' => $e->getMessage()], 500);
+            //Decrease From Stock
+            $item->product->decrement('quantity', $item->quantity);
         }
+
+        //Make Cart Empty And Update Cart Status
+        $cart->items()->delete();
+        $cart->status = 'ordered';
+        $cart->save();
+
+        DB::commit();
+        return response()->json([
+            'message' => 'Order placed',
+            'order'   => $order
+        ]);
+
+    } catch (Exception $e) {
+        DB::rollBack();
+        return response()->json([
+            'message' => 'Checkout failed',
+            'error'   => $e->getMessage()
+        ], 500);
     }
+  }
+
+     
 
 
 
