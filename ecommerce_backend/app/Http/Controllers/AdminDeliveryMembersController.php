@@ -68,9 +68,13 @@ class AdminDeliveryMembersController extends Controller
     ]);
     $order=Order::findOrFail($id);
     $order->delivery_member_id = $request->delivery_member_id;
+    $order->status = 'assigned';
     $order->save();
 
-    return $order->load('deliveryMember');
+    return response()->json([
+        'message' => 'Delivery member assigned successfully',
+        'order'   => $order->load('deliveryMember')
+    ]);
     }
 
   }

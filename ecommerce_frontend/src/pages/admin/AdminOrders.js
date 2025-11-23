@@ -45,6 +45,29 @@ const AdminOrders = () => {
     }
   };
 
+  // =============================
+  // Update Status → processing
+  // =============================
+  const updateStatus = async (orderId, newStatus) => {
+    const token = localStorage.getItem("access_token");
+
+    try {
+      await axios.post(
+        `http://127.0.0.1:8000/api/admin/orders/${orderId}/processing`,
+        { status: newStatus },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setOrders((prev) =>
+        prev.map((o) =>
+          o.id === orderId ? { ...o, status: newStatus } : o
+        )
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const assignDelivery = async (orderId, deliveryMemberId) => {
     const token = localStorage.getItem("access_token");
 
@@ -60,7 +83,7 @@ const AdminOrders = () => {
       setOrders((prev) =>
         prev.map((o) =>
           o.id === orderId
-            ? { ...o, delivery_member_id: deliveryMemberId }
+            ? { ...o, delivery_member_id: deliveryMemberId, status: "assigned" }
             : o
         )
       );
@@ -104,14 +127,27 @@ const AdminOrders = () => {
               <tr key={order.id}>
                 <td style={td}>{order.id}</td>
 
-                {/* User Info */}
                 <td style={td}>
                   {order.user?.name} <br />
                   <small>{order.user?.email}</small>
                 </td>
 
                 <td style={td}>${order.total_price}</td>
-                <td style={td}>{order.status}</td>
+
+                {/* Status Dropdown */}
+                <td style={td}>
+                  <select
+                    value={order.status}
+                    onChange={(e) =>
+                      updateStatus(order.id, e.target.value)
+                    }
+                  >
+                    <option value="pending">pending</option>
+                    <option value="processing">processing</option>
+                    <option value="assigned">assigned</option>
+                  </select>
+                </td>
+
                 <td style={td}>{order.address}</td>
                 <td style={td}>{order.mobile}</td>
 
@@ -136,7 +172,6 @@ const AdminOrders = () => {
                   {new Date(order.created_at).toLocaleString()}
                 </td>
 
-                {/* View Details Button */}
                 <td style={td}>
                   <button
                     onClick={() => navigate(`/admin/orders/${order.id}`)}

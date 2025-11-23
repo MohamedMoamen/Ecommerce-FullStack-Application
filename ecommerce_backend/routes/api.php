@@ -16,11 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/test', function () {
     return response()->json(['message' => 'API working']);
 });
-
+// Admin Routes
 Route::post('admin/login', [AdminAuthController::class, 'login'])->name('api.admin.login');;
 
-Route::get('/categories', [CategoryController::class, 'index']);//To admins and users
-Route::get('/category/{id}', [CategoryController::class, 'getSpecificCategory']);
+Route::get('/categories', [CategoryController::class, 'index']);//To admin and users
+Route::get('/category/{id}', [CategoryController::class, 'getSpecificCategory']);//To admin and users
 
 Route::get('/allproducts', [ProductController::class, 'getAllProducts']);
 Route::get('/productsOfCategory/{id}', [ProductController::class, 'getProductsOfCategory']);
@@ -41,6 +41,7 @@ Route::middleware(['auth:sanctum',EnsureAdmin::class])->group(function () {
 
     Route::get('/admin/orders', [AdminOrderController::class, 'index']);
     Route::get('/admin/orders/{id}', [AdminOrderController::class, 'show']);
+    Route::post('/admin/orders/{id}/processing', [AdminOrderController::class, 'setProcessing']);
     
     Route::get('/delivery-members', [AdminDeliveryMembersController::class, 'index']);
     Route::post('/delivery-members', [AdminDeliveryMembersController::class, 'store']);
@@ -53,6 +54,7 @@ Route::middleware(['auth:sanctum',EnsureAdmin::class])->group(function () {
 
 });
 
+// User Routes
 Route::post('user/register', [UserAuthController::class, 'register'])->name('register.submit');
 Route::post('user/login', [UserAuthController::class, 'login'])->name('api.user.login');;
 
@@ -72,11 +74,15 @@ Route::middleware('auth:sanctum')->group(function () {
 
     });
 
-
+//Delivery Member Routes
 Route::post('/delivery/login', [DeliveryAuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     
+    // Route::get('/deliverymember/orders',[DeliveryOrders::class,'index']);
+    // Route::get('/deliverymember/orders/{id}',[DeliveryOrders::class,'show']);
+    // Route::post('/deliverymember/changeOrderStatus',[DeliveryOrders::class,'change']);
+
     Route::post('/delivery/logout', [DeliveryAuthController::class, 'logout']);
 
 });
