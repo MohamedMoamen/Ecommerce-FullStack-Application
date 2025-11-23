@@ -14,6 +14,8 @@ import Login from "./components/Login";
 import UserCart from './pages/user/UserCart';
 import UserOrders from './pages/user/UserOrders';
 import UserOrderDetail from './pages/user/UserOrderDetail';
+import AdminDeliveryMembers from './pages/admin/AdminDeliveryMembers';
+import DeliveryHome from './pages/deliverymember/DeliveryHome';
 
 function App() {
   return (
@@ -29,6 +31,7 @@ function App() {
         <Route path="/admin/home" element={<AdminHome />} />
         <Route path="/admin/categories" element={<AdminCategories />} />
         <Route path="/admin/products" element={<AdminProducts />} />
+        <Route path="/admin/deliverymembers" element={<AdminDeliveryMembers />} />
         <Route path="/admin/category/:categoryId/products" element={<AdminCategoryProducts />} />
 
         {/* User Routes */}
@@ -41,6 +44,10 @@ function App() {
         <Route path="/user/product/:productId" element={<UserProductDetail />} />
         <Route path="/user/orders/:orderId" element={<UserOrderDetail />} />
         
+
+        {/* Delivery Member Routes */}
+        <Route path="/delivery/home" element={<DeliveryHome />} />
+
       </Routes>
     </BrowserRouter>
     </div>

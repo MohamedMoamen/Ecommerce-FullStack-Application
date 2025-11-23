@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import './AdminHeader.css';
+import './DeliveryHeader.css';
 // import { FaShoppingCart, FaSearch } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
-const AdminHeader = () => {
+const DeliveryHeader = () => {
   const [menu,setMenu]=useState("shop");
   const navigate = useNavigate();
 
@@ -12,7 +12,7 @@ const AdminHeader = () => {
 
     if (token) {
       try {
-        await axios.post('http://127.0.0.1:8000/api/admin/logout', {}, {
+        await axios.post('http://127.0.0.1:8000/api/delivery/logout', {}, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -34,10 +34,10 @@ const AdminHeader = () => {
             <p>SHOPPER</p>
         </div>
         <ul className="nav-menu">
-            <li onClick={()=>{setMenu("home")}}><Link style={{textDecoration:"none"}} to='/admin/home'>Home</Link>{menu==="home"?<hr/>:<></>} </li>
-            <li onClick={()=>{setMenu("categories")}}><Link style={{textDecoration:"none"}} to='/admin/categories'>Categories</Link>{menu==="categories"?<hr/>:<></>}</li>
+            <li onClick={()=>{setMenu("home")}}><Link style={{textDecoration:"none"}} to='/delivery/home'>Home</Link>{menu==="home"?<hr/>:<></>} </li>
+            {/* <li onClick={()=>{setMenu("categories")}}><Link style={{textDecoration:"none"}} to='/admin/categories'>Categories</Link>{menu==="categories"?<hr/>:<></>}</li>
             <li onClick={()=>{setMenu("products")}}><Link style={{textDecoration:"none"}} to='/admin/products'>Products</Link>{menu==="products"?<hr/>:<></>}</li>
-            <li onClick={()=>{setMenu("deliverymembers")}}><Link style={{textDecoration:"none"}} to='/admin/deliverymembers'>Delivery Members</Link>{menu==="deliverymembers"?<hr/>:<></>}</li>
+            <li onClick={()=>{setMenu("deliverymembers")}}><Link style={{textDecoration:"none"}} to='/admin/deliverymembers'>Delivery Members</Link>{menu==="deliverymembers"?<hr/>:<></>}</li> */}
         </ul>
         <div className="nav-login-cart">
             <button onClick={handleLogout}>Logout</button>
@@ -47,4 +47,4 @@ const AdminHeader = () => {
   );
 };
 
-export default AdminHeader;
+export default DeliveryHeader;

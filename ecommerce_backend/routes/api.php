@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\AdminDeliveryMembersController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CountController;
+use App\Http\Controllers\DeliveryAuthController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserAuthController;
@@ -36,6 +38,12 @@ Route::middleware(['auth:sanctum',EnsureAdmin::class])->group(function () {
 
     Route::get('/counts',[CountController::class,'getCounts']);
 
+    Route::get('/delivery-members', [AdminDeliveryMembersController::class, 'index']);
+    Route::post('/delivery-members', [AdminDeliveryMembersController::class, 'store']);
+    Route::put('/delivery-members/{id}', [AdminDeliveryMembersController::class, 'update']);
+    Route::delete('/delivery-members/{id}', [AdminDeliveryMembersController::class, 'destroy']);
+
+    Route::post('/orders/{order}/assign-delivery', [AdminDeliveryMembersController::class, 'assignDelivery']);
 
     Route::post('admin/logout', [AdminAuthController::class, 'logout']);
 
@@ -59,3 +67,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('user/logout', [UserAuthController::class, 'logout']);
 
     });
+
+
+Route::post('/delivery/login', [DeliveryAuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    
+    Route::post('/delivery/logout', [DeliveryAuthController::class, 'logout']);
+
+});

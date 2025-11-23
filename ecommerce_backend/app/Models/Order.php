@@ -11,7 +11,8 @@ class Order extends Model
         'total_price',
         'status',
         'address',
-        'mobile'
+        'mobile',
+        'delivery_member_id'
     ];
 
     public function user() {
@@ -27,5 +28,9 @@ class Order extends Model
     public function items()
     {
         return $this->hasMany(OrderProduct::class);
+    }
+    public function deliveryMember()
+    {
+    return $this->belongsTo(DeliveryMember::class, 'delivery_member_id');
     }
 }

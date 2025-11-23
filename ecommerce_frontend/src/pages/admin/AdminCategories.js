@@ -54,7 +54,6 @@ const closeAddModal = () => setShowAddModal(false);
   if (loading) return <p>Loading categories...</p>;
   if (error) return <p style={{ color: "red" }}>{JSON.stringify(error)}</p>;
 
-  // فتح نافذة التعديل
   const handleEdit = (category) => {
     setEditCategory(category);
     setEditData({
@@ -64,7 +63,6 @@ const closeAddModal = () => setShowAddModal(false);
     });
   };
 
-  // تغيير البيانات داخل الـ form
   const handleInputChange = (e) => {
     setEditData({ ...editData, [e.target.name]: e.target.value });
   };
@@ -73,7 +71,6 @@ const closeAddModal = () => setShowAddModal(false);
     setEditData({ ...editData, imageFile: e.target.files[0] });
   };
 
-  // إرسال Update للـ API
   const handleUpdateSubmit = async (e) => {
     e.preventDefault();
 
@@ -108,7 +105,6 @@ const closeAddModal = () => setShowAddModal(false);
         }
       );
 
-      // تحديث القائمة المحلية
       const updated = res.data;
       updated.image_url = updated.imagepath
         ? `http://127.0.0.1:8000/storage/${updated.imagepath}`
@@ -184,7 +180,6 @@ const closeAddModal = () => setShowAddModal(false);
       }
     );
 
-    // إضافة العنصر الجديد للستيت
     setCategories([
       ...categories,
       {
@@ -195,7 +190,6 @@ const closeAddModal = () => setShowAddModal(false);
       },
     ]);
 
-    // إغلاق المودال وتفريغ البيانات
     setNewCategory({ name: "", description: "", image: null });
     setShowAddModal(false);
 
@@ -287,7 +281,6 @@ const closeAddModal = () => setShowAddModal(false);
         </tbody>
       </table>
 
-      {/* مودال التعديل */}
       {editCategory && (
         <div
           style={{
@@ -338,7 +331,6 @@ const closeAddModal = () => setShowAddModal(false);
         </div>
       )}
 
-      {/* مودال الإضافة */}
 {showAddModal && (
   <div
     style={{

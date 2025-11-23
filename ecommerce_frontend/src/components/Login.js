@@ -16,9 +16,12 @@ const Login = () => {
     e.preventDefault();
     setError('');
 
-    const endpoint = role === 'admin' 
-      ? 'http://127.0.0.1:8000/api/admin/login' 
-      : 'http://127.0.0.1:8000/api/user/login';
+    const endpoint =
+      role === 'admin'
+        ? 'http://127.0.0.1:8000/api/admin/login'
+        : role === 'delivery'
+        ? 'http://127.0.0.1:8000/api/delivery/login'
+        : 'http://127.0.0.1:8000/api/user/login';
 
     try {
       const res = await axios.post(endpoint, { email, password });
@@ -27,6 +30,7 @@ const Login = () => {
       localStorage.setItem('role', role);
 
       if (role === 'admin') navigate('/admin/home');
+      else if (role === 'delivery') navigate('/delivery/home');
       else navigate('/user/home');
 
     } catch (err) {
@@ -61,13 +65,17 @@ const Login = () => {
               type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
             <input 
               type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
+
             <select value={role} onChange={e => setRole(e.target.value)} required>
               <option value="user">User</option>
               <option value="admin">Admin</option>
+              <option value="delivery">Delivery Member</option>
             </select>
+
             <button type="submit">Login</button>
+
             <p style={{marginTop:'10px'}}>
-              Don't have an account? <span style={{color:'blue', cursor:'pointer'}} onClick={()=>setIsRegister(true)}>Register</span>
+              Don't have an account? <span style={{color:'blue', cursor:'pointer'}} onClick={()=>setIsRegister(true)}>Register As User</span>
             </p>
           </form>
         ) : (
