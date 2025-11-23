@@ -61,12 +61,12 @@ class AdminDeliveryMembersController extends Controller
    }
 
 
-    public function assignDelivery(Request $request, Order $order)
+    public function assignDelivery(Request $request,$id)
     {
     $request->validate([
         'delivery_member_id' => 'required|exists:delivery_members,id'
     ]);
-
+    $order=Order::findOrFail($id);
     $order->delivery_member_id = $request->delivery_member_id;
     $order->save();
 

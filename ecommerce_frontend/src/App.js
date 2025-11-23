@@ -16,6 +16,8 @@ import UserOrders from './pages/user/UserOrders';
 import UserOrderDetail from './pages/user/UserOrderDetail';
 import AdminDeliveryMembers from './pages/admin/AdminDeliveryMembers';
 import DeliveryHome from './pages/deliverymember/DeliveryHome';
+import AdminOrders from './pages/admin/AdminOrders';
+import AdminOrderDetail from './pages/admin/AdminOrderDetail';
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
         <Route path="/admin/home" element={<AdminHome />} />
         <Route path="/admin/categories" element={<AdminCategories />} />
         <Route path="/admin/products" element={<AdminProducts />} />
+        <Route path="/admin/orders" element={<AdminOrders />} />
+        <Route path="/admin/orders/:orderId" element={<AdminOrderDetail />} />
         <Route path="/admin/deliverymembers" element={<AdminDeliveryMembers />} />
         <Route path="/admin/category/:categoryId/products" element={<AdminCategoryProducts />} />
 

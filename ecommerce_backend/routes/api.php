@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminDeliveryMembersController;
+use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CountController;
@@ -38,12 +39,15 @@ Route::middleware(['auth:sanctum',EnsureAdmin::class])->group(function () {
 
     Route::get('/counts',[CountController::class,'getCounts']);
 
+    Route::get('/admin/orders', [AdminOrderController::class, 'index']);
+    Route::get('/admin/orders/{id}', [AdminOrderController::class, 'show']);
+    
     Route::get('/delivery-members', [AdminDeliveryMembersController::class, 'index']);
     Route::post('/delivery-members', [AdminDeliveryMembersController::class, 'store']);
     Route::put('/delivery-members/{id}', [AdminDeliveryMembersController::class, 'update']);
     Route::delete('/delivery-members/{id}', [AdminDeliveryMembersController::class, 'destroy']);
 
-    Route::post('/orders/{order}/assign-delivery', [AdminDeliveryMembersController::class, 'assignDelivery']);
+    Route::post('/orders/{id}/assign-delivery', [AdminDeliveryMembersController::class, 'assignDelivery']);
 
     Route::post('admin/logout', [AdminAuthController::class, 'logout']);
 

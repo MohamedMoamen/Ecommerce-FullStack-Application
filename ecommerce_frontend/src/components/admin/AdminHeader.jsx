@@ -37,6 +37,7 @@ const AdminHeader = () => {
             <li onClick={()=>{setMenu("home")}}><Link style={{textDecoration:"none"}} to='/admin/home'>Home</Link>{menu==="home"?<hr/>:<></>} </li>
             <li onClick={()=>{setMenu("categories")}}><Link style={{textDecoration:"none"}} to='/admin/categories'>Categories</Link>{menu==="categories"?<hr/>:<></>}</li>
             <li onClick={()=>{setMenu("products")}}><Link style={{textDecoration:"none"}} to='/admin/products'>Products</Link>{menu==="products"?<hr/>:<></>}</li>
+            <li onClick={()=>{setMenu("orders")}}><Link style={{textDecoration:"none"}} to='/admin/orders'>Orders</Link>{menu==="orders"?<hr/>:<></>}</li>
             <li onClick={()=>{setMenu("deliverymembers")}}><Link style={{textDecoration:"none"}} to='/admin/deliverymembers'>Delivery Members</Link>{menu==="deliverymembers"?<hr/>:<></>}</li>
         </ul>
         <div className="nav-login-cart">
