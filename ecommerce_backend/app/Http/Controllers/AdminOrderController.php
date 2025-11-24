@@ -28,6 +28,30 @@ class AdminOrderController extends Controller
     return response()->json($order);
    }
 
+   public function getByStatus($status)
+  {
+    $validStatuses = [
+        'pending',
+        'processing',
+        'assigned',
+        'on_the_way',
+        'delivered',
+        'failed'
+    ];
+
+    if (!in_array($status, $validStatuses)) {
+        return response()->json(['message' => 'Invalid status'], 400);
+    }
+
+    $orders = Order::with(['user','deliveryMember'])
+                    ->where('status', $status)
+                    ->orderBy('id', 'desc')
+                    ->get();
+
+    return response()->json($orders);
+   }
+
+
    public function setProcessing($id)
   {
     $order = Order::findOrFail($id);

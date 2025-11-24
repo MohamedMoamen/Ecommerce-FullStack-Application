@@ -34,7 +34,7 @@ const UserHeader = () => {
             <p>SHOPPER</p>
         </div>
         <ul className="nav-menu">
-            <li onClick={()=>{setMenu("home")}}><Link style={{textDecoration:"none"}} to='/user/home'>Home</Link>{menu==="home"?<hr/>:<></>} </li>
+            {/* <li onClick={()=>{setMenu("home")}}><Link style={{textDecoration:"none"}} to='/user/home'>Home</Link>{menu==="home"?<hr/>:<></>} </li> */}
             <li onClick={()=>{setMenu("categories")}}><Link style={{textDecoration:"none"}} to='/user/categories'>Categories</Link>{menu==="categories"?<hr/>:<></>}</li>
             <li onClick={()=>{setMenu("products")}}><Link style={{textDecoration:"none"}} to='/user/products'>Products</Link>{menu==="products"?<hr/>:<></>}</li>
             <li onClick={()=>{setMenu("orders")}}><Link style={{textDecoration:"none"}} to='/user/orders'>Orders</Link>{menu==="orders"?<hr/>:<></>}</li>

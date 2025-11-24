@@ -8,23 +8,46 @@ const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
   const [deliveryMembers, setDeliveryMembers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedStatus, setSelectedStatus] = useState("all");
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchOrders();
+    fetchOrders("all");
     fetchDeliveryMembers();
   }, []);
 
-  const fetchOrders = async () => {
+  // =============================
+  // Title Based on Status
+  // =============================
+  const getTitle = () => {
+    if (selectedStatus === "all") return "All Orders";
+    return selectedStatus.replace(/_/g, " ").toUpperCase() + " ORDERS";
+  };
+
+  // =============================
+  // Fetch Orders by Status
+  // =============================
+  const fetchOrders = async (status = "all") => {
     const token = localStorage.getItem("access_token");
+
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/admin/orders", {
+      let url = "";
+
+      if (status === "all") {
+        url = "http://127.0.0.1:8000/api/admin/orders";
+      } else {
+        url = `http://127.0.0.1:8000/api/admin/orders/by-status/${status}`;
+      }
+
+      const res = await axios.get(url, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       const sorted = res.data.sort(
         (a, b) => new Date(b.created_at) - new Date(a.created_at)
       );
+
       setOrders(sorted);
     } catch (error) {
       console.log(error);
@@ -33,6 +56,9 @@ const AdminOrders = () => {
     }
   };
 
+  // =============================
+  // Fetch Delivery Members
+  // =============================
   const fetchDeliveryMembers = async () => {
     const token = localStorage.getItem("access_token");
     try {
@@ -46,7 +72,7 @@ const AdminOrders = () => {
   };
 
   // =============================
-  // Update Status → processing
+  // Update Status
   // =============================
   const updateStatus = async (orderId, newStatus) => {
     const token = localStorage.getItem("access_token");
@@ -68,6 +94,9 @@ const AdminOrders = () => {
     }
   };
 
+  // =============================
+  // Assign Delivery Member
+  // =============================
   const assignDelivery = async (orderId, deliveryMemberId) => {
     const token = localStorage.getItem("access_token");
 
@@ -75,9 +104,7 @@ const AdminOrders = () => {
       await axios.post(
         `http://127.0.0.1:8000/api/orders/${orderId}/assign-delivery`,
         { delivery_member_id: deliveryMemberId },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       setOrders((prev) =>
@@ -99,8 +126,46 @@ const AdminOrders = () => {
       <AdminHeader />
 
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: 20 }}>
-        <h2>All Orders (Admin)</h2>
+        <h2>{getTitle()} (Admin)</h2>
 
+        {/* ===========================
+            Toggle Button Group
+        ============================ */}
+        <div style={{ marginBottom: 20 }}>
+          {[
+            "all",
+            "pending",
+            "processing",
+            "assigned",
+            "on_the_way",
+            "delivered",
+            "failed",
+          ].map((status) => (
+            <button
+              key={status}
+              onClick={() => {
+                setSelectedStatus(status);
+                setLoading(true);
+                fetchOrders(status);
+              }}
+              style={{
+                padding: "8px 14px",
+                marginRight: 10,
+                borderRadius: 6,
+                border: "1px solid #ccc",
+                backgroundColor: selectedStatus === status ? "#444" : "#eee",
+                color: selectedStatus === status ? "white" : "black",
+                cursor: "pointer",
+              }}
+            >
+              {status.toUpperCase().replace(/_/g, " ")}
+            </button>
+          ))}
+        </div>
+
+        {/* ===========================
+            Orders Table
+        ============================ */}
         <table
           style={{
             width: "100%",
@@ -138,15 +203,18 @@ const AdminOrders = () => {
                 <td style={td}>
                   <select
                     value={order.status}
-                    onChange={(e) =>
-                      updateStatus(order.id, e.target.value)
-                    }
+                    onChange={(e) => updateStatus(order.id, e.target.value)}
                   >
                     <option value="pending">pending</option>
                     <option value="processing">processing</option>
                     <option value="assigned">assigned</option>
+                    <option value="on_the_way" disabled>on the way</option>
+                    <option value="delivered" disabled>delivered</option>
+                    <option value="failed" disabled>failed</option>
                   </select>
                 </td>
+
+
 
                 <td style={td}>{order.address}</td>
                 <td style={td}>{order.mobile}</td>
@@ -155,9 +223,7 @@ const AdminOrders = () => {
                 <td style={td}>
                   <select
                     value={order.delivery_member_id || ""}
-                    onChange={(e) =>
-                      assignDelivery(order.id, e.target.value)
-                    }
+                    onChange={(e) => assignDelivery(order.id, e.target.value)}
                   >
                     <option value="">Select Delivery</option>
                     {deliveryMembers.map((m) => (

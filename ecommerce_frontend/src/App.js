@@ -6,7 +6,6 @@ import AdminCategoryProducts from "./pages/admin/AdminCategoryProducts";
 import UserCategoryProducts from "./pages/user/UserCategoryProducts";
 import UserProductDetail from "./pages/user/UserProductDetail"; // تأكد من مسار الملف
 
-import UserHome from "./pages/user/UserHome";
 import UserCategories from "./pages/user/UserCategories";
 import UserProducts from "./pages/user/UserProducts";
 
@@ -15,9 +14,10 @@ import UserCart from './pages/user/UserCart';
 import UserOrders from './pages/user/UserOrders';
 import UserOrderDetail from './pages/user/UserOrderDetail';
 import AdminDeliveryMembers from './pages/admin/AdminDeliveryMembers';
-import DeliveryHome from './pages/deliverymember/DeliveryHome';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminOrderDetail from './pages/admin/AdminOrderDetail';
+import DeliveryOrders from './pages/deliverymember/DeliveryOrders';
+import DeliveryOrderDetail from './pages/deliverymember/DeliveryOrderDetail';
 
 function App() {
   return (
@@ -39,7 +39,7 @@ function App() {
         <Route path="/admin/category/:categoryId/products" element={<AdminCategoryProducts />} />
 
         {/* User Routes */}
-        <Route path="/user/home" element={<UserHome />} />
+        {/* <Route path="/user/home" element={<UserHome />} /> */}
         <Route path="/user/categories" element={<UserCategories />} />
         <Route path="/user/products" element={<UserProducts />} />
         <Route path="/user/cart" element={<UserCart />} />
@@ -50,7 +50,8 @@ function App() {
         
 
         {/* Delivery Member Routes */}
-        <Route path="/delivery/home" element={<DeliveryHome />} />
+        <Route path="/delivery/orders" element={<DeliveryOrders />} />
+        <Route path="/delivery/orders/:orderId" element={<DeliveryOrderDetail />} />
 
       </Routes>
     </BrowserRouter>

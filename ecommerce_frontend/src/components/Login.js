@@ -30,8 +30,8 @@ const Login = () => {
       localStorage.setItem('role', role);
 
       if (role === 'admin') navigate('/admin/home');
-      else if (role === 'delivery') navigate('/delivery/home');
-      else navigate('/user/home');
+      else if (role === 'delivery') navigate('/delivery/orders');
+      else navigate('/user/categories');
 
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');

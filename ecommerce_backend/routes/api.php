@@ -7,6 +7,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CountController;
 use App\Http\Controllers\DeliveryAuthController;
+use App\Http\Controllers\DeliveryOrderController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserAuthController;
@@ -41,6 +42,7 @@ Route::middleware(['auth:sanctum',EnsureAdmin::class])->group(function () {
 
     Route::get('/admin/orders', [AdminOrderController::class, 'index']);
     Route::get('/admin/orders/{id}', [AdminOrderController::class, 'show']);
+    Route::get('/admin/orders/by-status/{status}', [AdminOrderController::class, 'getByStatus']);
     Route::post('/admin/orders/{id}/processing', [AdminOrderController::class, 'setProcessing']);
     
     Route::get('/delivery-members', [AdminDeliveryMembersController::class, 'index']);
@@ -79,10 +81,10 @@ Route::post('/delivery/login', [DeliveryAuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     
-    // Route::get('/deliverymember/orders',[DeliveryOrders::class,'index']);
-    // Route::get('/deliverymember/orders/{id}',[DeliveryOrders::class,'show']);
-    // Route::post('/deliverymember/changeOrderStatus',[DeliveryOrders::class,'change']);
-
+    Route::get('/delivery/orders', [DeliveryOrderController::class, 'myOrders']);
+    Route::get('/delivery/orders/{status}', [DeliveryOrderController::class, 'myOrdersByStatus']);
+    Route::put('/delivery/orders/{orderId}/status', [DeliveryOrderController::class, 'updateOrderStatus']);
+    Route::get('/delivery/orders/order/{id}', [DeliveryOrderController::class, 'show']);
     Route::post('/delivery/logout', [DeliveryAuthController::class, 'logout']);
 
 });

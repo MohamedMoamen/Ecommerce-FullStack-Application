@@ -31,6 +31,26 @@ const UserOrders = () => {
     }
   };
 
+  // =============================
+  // Determine row color based on status
+  // =============================
+  const getRowColor = (status) => {
+    switch (status) {
+      case "failed":
+        return "#dc3545"; //red
+      case "delivered":
+        return "#28a745";//green
+      case "pending":
+        return "#ffffff";//white
+      case "processing":
+      case "assigned":
+      case "on_the_way":
+        return "#fff3cd"; //yellow
+      default:
+        return "#ffffff";
+    }
+  };
+
   if (loading) return <p>Loading orders...</p>;
 
   return (
@@ -57,7 +77,7 @@ const UserOrders = () => {
 
             <tbody>
               {orders.map((order) => (
-                <tr key={order.id}>
+                <tr key={order.id} style={{ backgroundColor: getRowColor(order.status) }}>
                   <td style={td}>{order.id}</td>
                   <td style={td}>${order.total_price}</td>
                   <td style={td}>{order.status}</td>

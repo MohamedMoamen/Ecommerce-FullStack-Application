@@ -34,7 +34,7 @@ const DeliveryHeader = () => {
             <p>SHOPPER</p>
         </div>
         <ul className="nav-menu">
-            <li onClick={()=>{setMenu("home")}}><Link style={{textDecoration:"none"}} to='/delivery/home'>Home</Link>{menu==="home"?<hr/>:<></>} </li>
+            <li onClick={()=>{setMenu("home")}}><Link style={{textDecoration:"none"}} to='/delivery/orders'>Orders</Link>{menu==="home"?<hr/>:<></>} </li>
             {/* <li onClick={()=>{setMenu("categories")}}><Link style={{textDecoration:"none"}} to='/admin/categories'>Categories</Link>{menu==="categories"?<hr/>:<></>}</li>
             <li onClick={()=>{setMenu("products")}}><Link style={{textDecoration:"none"}} to='/admin/products'>Products</Link>{menu==="products"?<hr/>:<></>}</li>
             <li onClick={()=>{setMenu("deliverymembers")}}><Link style={{textDecoration:"none"}} to='/admin/deliverymembers'>Delivery Members</Link>{menu==="deliverymembers"?<hr/>:<></>}</li> */}
